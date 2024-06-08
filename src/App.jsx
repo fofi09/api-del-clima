@@ -23,8 +23,8 @@ export default function app(){
     icon:"",
     conditionText:"",
   });
-
-
+  //////////
+  const [searched, setSearched] = useState(false); // Definir el estado searched aquí
   //////////
 
   const onSubmit= async (e) => {
@@ -61,6 +61,7 @@ export default function app(){
         icon:data.current.condition.icon,
         conditionText:data.current.condition.text,
       });
+      setSearched(true);
     }
     catch(error){
       setError({
@@ -128,7 +129,29 @@ return(
       Buscar Ubicacion
     </LoadingButton>
 
-      {clima.city &&(
+    {searched && (
+            <div className="cardContainer">
+              <div className="card">
+                <p className="city">
+                  {clima.city}, {clima.country}
+                </p>
+                <p className="weather">{clima.conditionText}</p>
+                <img
+                  className="weather"
+                  alt={clima.conditionText}
+                  src={clima.icon}
+                  style={{ width: "50px", height: "50px" }}
+                />
+                <p className="temp">{clima.temp} °C</p>
+              </div>
+            </div>
+          )}
+
+
+
+
+
+      {/* {clima.city &&(
         <Box 
         sx={{
           mt:2,
@@ -159,7 +182,7 @@ return(
         </Typography>
         </Box>
       )}
-      
+       */}
 
 
   </Box>
