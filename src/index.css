@@ -64,6 +64,11 @@ html, body {
   background-color: rgba(33, 33, 33, 0.7); /* Fondo oscuro */
   border: 1px solid rgba(255, 255, 255, 0.089);
   cursor: pointer;
+  transition: background-color 0.3s; /* Transición suave */
+}
+
+.card:hover {
+  background-color: rgba(200, 200, 200, 0.3); /* Cambiar a un color gris semi-transparente en hover */
 }
 
 .city {
@@ -138,3 +143,12 @@ html, body {
 .cardContainer:hover::before {
   transform: translate(-50px, 50px);
 }
+
+
+.temp {
+  font-size: 1.8em;
+  color: white; /* Color blanco */
+  text-shadow: 0 0 8px white, 0 0 20px white, 0 0 30px white; /* Efecto de sombra */
+}
+
+

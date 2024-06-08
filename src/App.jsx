@@ -64,9 +64,15 @@ export default function app(){
       setSearched(true);
     }
     catch(error){
+      let errorMessage = "Error desconocido"; 
+      if (error.message === "No matching location found.") {
+        errorMessage = "La ciudad no existe. Asegúrese de ingresar correctamente el nombre.";
+      } else {
+        errorMessage = error.message; 
+      }
       setError({
         error: true,
-        message: error.message,
+        message: errorMessage,
       });
     } finally{
       setLoading(false);
@@ -74,17 +80,19 @@ export default function app(){
   };
 
 return(
-  <div className="background-color">
+  <div className="background-color"   style={{height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "3px"}}>
    
 <Container
     maxWidth="xs"
     sx={{
-      mt: 2
+      mt: 2,
+      border: "1px solid black", // Agrega un borde negro
+          borderRadius: "10px", // Ajusta el radio de borde
+          padding: "20px", // Ajusta el relleno
+          backgroundColor: "white" // Fondo blanco
     }}
    
   >
-
-
 
 
 <Typography
@@ -94,10 +102,11 @@ return(
   gutterBottom
   sx={{
     animation: "HeartBeat 4s ease infinite",
+    fontFamily: "Arial"
  
   }}
 >
-  api del clima
+  Api del clima
 </Typography>
 
   <Box
@@ -117,6 +126,9 @@ return(
     onChange={(e) => setCiudad(e.target.value)}
     error={error.error}
     helperText={error.message}
+
+    sx={{ color: "black", "& .MuiOutlinedInput-notchedOutline": { borderColor: "black" },  "&:hover fieldset": {
+      borderColor: "black"} }}
     >
     </TextField>
 
@@ -125,65 +137,43 @@ return(
       variant="outlined"
       loading={loading}
       loadingIndicator="Buscando..."
+      sx={{ color: "black", borderColor:"black", backgroundColor: "grey", "&:hover": { backgroundColor: "gray" }, "&:hover": {
+        backgroundColor: "gray" // Cambia el color de fondo al pasar el mouse
+      }}}
     >
       Buscar Ubicacion
     </LoadingButton>
 
+    
     {searched && (
-            <div className="cardContainer">
-              <div className="card">
-                <p className="city">
-                  {clima.city}, {clima.country}
-                </p>
-                <p className="weather">{clima.conditionText}</p>
-                <img
-                  className="weather"
-                  alt={clima.conditionText}
-                  src={clima.icon}
-                  style={{ width: "50px", height: "50px" }}
-                />
-                <p className="temp">{clima.temp} °C</p>
-              </div>
-            </div>
-          )}
-
-
-
-
-
-      {/* {clima.city &&(
-        <Box 
-        sx={{
-          mt:2,
-          display: "grid",
-          gap: 2,
-          textAlign: "center",
-        }}
-        >
-      <Typography variant='h4' component="h2">
+  <div
+    className="cardContainer"
+    style={{
+      display: "flex",
+      maxWidth: "359px",
+       margin: "auto",
+        textAlign: "center",
+      textAlignLast:"center",
+      justifyContent: "center",
+      alignItems: "center",
+      
+    }}
+  >
+    <div className="card" >
+      <p className="city">
         {clima.city}, {clima.country}
-      </Typography>
-
-      <Box 
-      component="img"
-      alt={clima.conditionText}
-      src={clima.icon}
-      sx={{margin:"0 auto"}}
+      </p>
+      <p className="weather">{clima.conditionText}</p>
+      <img
+        className="weather"
+        alt={clima.conditionText}
+        src={clima.icon}
+        style={{ width: "100px", height: "75px" }}
       />
-
-      <Typography 
-      variant='h5' component='h3'>
-        {clima.temp} °C
-      </Typography>
-
-      <Typography 
-      variant='h6' component='h4'>
-        {clima.conditionText}
-        </Typography>
-        </Box>
-      )}
-       */}
-
+      <p className="temp">{clima.temp} °C</p>
+    </div>
+  </div>
+)}
 
   </Box>
   </Container>
@@ -191,4 +181,7 @@ return(
  
 );
 }
- 
+
+
+
+
