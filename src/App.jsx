@@ -1,9 +1,11 @@
 // console.log(import.meta.env.VITE_API_KEY);
+import './index.css'
 import { LoadingButton } from "@mui/lab";
 import {Box, Container, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
-const API_CLIMA= `http://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_API_KEY}&q=`;
+
+const API_CLIMA= `https://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_API_KEY}&q=`;
 export default function app(){
 
   const [ciudad, setCiudad]= useState("");
@@ -12,6 +14,18 @@ export default function app(){
       error:false,
       message:"",
   });
+  //////////
+  const [clima, setClima] = useState({
+    city:"",
+    country:"",
+    temp:"",
+    condition:"",
+    icon:"",
+    conditionText:"",
+  });
+
+
+  //////////
 
   const onSubmit= async (e) => {
     e.preventDefault(); //evita el comportammiento determinado del evento
@@ -23,14 +37,14 @@ export default function app(){
       message: "",
     });
 
-    const[clima, setClima]= useState({
-      city:"",
-      country:"",
-      temp:"",
-      condition:"",
-      icon:"",
-      conditionText:"",
-    });
+    // const[clima, setClima]= useState({
+    //   city:"",
+    //   country:"",
+    //   temp:"",
+    //   condition:"",
+    //   icon:"",
+    //   conditionText:"",
+    // });
 
     try{
       if(!ciudad.trim()) throw {message:"Debe ingresar una Ciudad"};
@@ -40,18 +54,17 @@ export default function app(){
       if(data.error) throw {message: data.error.message};
 
       setClima({
-        city:"data.location.name",
-        country:"data.location.country",
-        temp:"data.current.temp_c",
-        condition:"data.current.condition.code",
-        icon:"data.current.condition.icon",
-        conditionText:"data.current.condition.text",
-      })
+        city:data.location.name,
+        country:data.location.country,
+        temp:data.current.temp_c,
+        condition:data.current.condition.code,
+        icon:data.current.condition.icon,
+        conditionText:data.current.condition.text,
+      });
     }
     catch(error){
-    
       setError({
-        error:true,
+        error: true,
         message: error.message,
       });
     } finally{
@@ -60,16 +73,31 @@ export default function app(){
   };
 
 return(
-  <Container
+  <div className="background-color">
+   
+<Container
     maxWidth="xs"
-    sx={{mt: 2}}
+    sx={{
+      mt: 2
+    }}
+   
+  >
+
+
+
+
+<Typography
+  variant="h3"
+  component="h1"
+  align="center"
+  gutterBottom
+  sx={{
+    animation: "HeartBeat 4s ease infinite",
+ 
+  }}
 >
-  <Typography
-    variant="h3"
-    component="h1"
-    aling="center"
-    gutterBottom
-  >Radar del clima</Typography>
+  api del clima
+</Typography>
 
   <Box
   sx={{display:"grid", gap: 2}}
@@ -100,8 +128,44 @@ return(
       Buscar Ubicacion
     </LoadingButton>
 
+      {clima.city &&(
+        <Box 
+        sx={{
+          mt:2,
+          display: "grid",
+          gap: 2,
+          textAlign: "center",
+        }}
+        >
+      <Typography variant='h4' component="h2">
+        {clima.city}, {clima.country}
+      </Typography>
+
+      <Box 
+      component="img"
+      alt={clima.conditionText}
+      src={clima.icon}
+      sx={{margin:"0 auto"}}
+      />
+
+      <Typography 
+      variant='h5' component='h3'>
+        {clima.temp} °C
+      </Typography>
+
+      <Typography 
+      variant='h6' component='h4'>
+        {clima.conditionText}
+        </Typography>
+        </Box>
+      )}
+      
+
+
   </Box>
   </Container>
+  </div>
+ 
 );
 }
  
